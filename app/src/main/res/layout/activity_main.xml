@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:gravity="center_horizontal">
+
+   <ScrollView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
+
+           <androidx.cardview.widget.CardView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:cardBackgroundColor="#fff"
+               app:cardUseCompatPadding="true"
+               app:cardCornerRadius="3dp"
+               app:cardElevation="3dp">
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="vertical"
+                   android:padding="5dp">
+                   <TextView
+                       android:text="Result"
+                       android:textColor="@color/colorPrimary"
+                       android:textSize="20sp"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content">
+                   </TextView>
+                   <!--The scanned text from image will display here-->
+                   <EditText
+                       android:id="@+id/resultEt"
+                       android:hint=""
+                       android:autoLink="all"
+                       android:padding="5dp"
+                       android:textColor="#000"
+                       android:background="@null"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content">
+                   </EditText>
+
+               </LinearLayout>
+           </androidx.cardview.widget.CardView>
+
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal"
+               android:id="@+id/button_save"
+               android:text="save"
+               android:onClick="save"></Button>
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/button_load"
+               android:text="load"
+               android:layout_gravity="center_horizontal"
+               android:onClick="load"></Button>
+
+           <androidx.cardview.widget.CardView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:cardBackgroundColor="#fff"
+               app:cardUseCompatPadding="true"
+               app:cardCornerRadius="3dp"
+               app:cardElevation="3dp">
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="vertical"
+                   android:padding="5dp">
+
+                   <TextView
+                       android:text="Image Preview"
+                       android:textColor="@color/colorPrimary"
+                       android:textSize="20sp"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content">
+                   </TextView>
+                   <!--taken image will display here-->
+                   <ImageView
+                       android:id="@+id/imageIv"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:maxHeight="250dp">
+                   </ImageView>
+
+               </LinearLayout>
+           </androidx.cardview.widget.CardView>
+           <!--insert image button in menu-->
+
+
+       </LinearLayout>
+   </ScrollView>
+
+</RelativeLayout>
