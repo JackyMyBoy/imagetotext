@@ -44,6 +44,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -77,8 +78,21 @@ public class MainActivity extends AppCompatActivity {
         cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         //storage permission
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+
     }
 
+    public void save(View v){
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TITLE, "filename.txt");
+
+        startActivityForResult(intent, 1);
+    }
+
+
+    /*
     public void save(View v){
         String text = mResultEt.getText().toString();
         FileOutputStream fos = null;
@@ -107,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
 
         File sdCard = Environment.getExternalStorageDirectory();
         File dir = new File(sdCard.getAbsolutePath() + "/dir1/dir2");
@@ -136,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-    }
+    }*/ //senas saugojimo bandymas
 
     public void load(View v){
         FileInputStream fis = null;
@@ -349,6 +363,27 @@ public class MainActivity extends AppCompatActivity {
                 Exception error = result.getError();
                 Toast.makeText(this, ""+error, Toast.LENGTH_SHORT).show();
 
+            }
+        }
+
+        if (requestCode == 1){
+            if(resultCode == RESULT_OK){
+                try {
+                    Uri uri = data.getData();
+
+                    OutputStream outputStream = getContentResolver().openOutputStream(uri);
+
+                    outputStream.write(mResultEt.getText().toString().getBytes());
+
+                    outputStream.close();
+
+                    Toast.makeText(this,"File saved successfully", Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, "Failed to save file", Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                Toast.makeText(this,"File not saved", Toast.LENGTH_SHORT).show();
             }
         }
     }
