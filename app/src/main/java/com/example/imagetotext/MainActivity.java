@@ -20,10 +20,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -31,6 +33,7 @@ import android.widget.Toast;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.google.firebase.FirebaseApp;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -53,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     EditText mResultEt;
     ImageView mPreviewIv;
 
+    //public static final String EXTRA_TEXT = "com.example.imagetotext.EXTRA_TEXT";
+
     private static final int CAMERA_REQUEST_CODE = 200;
     private static final int STORAGE_REQUEST_CODE = 400;
     private static final int IMAGE_PICK_GALLERY_CODE = 1000;
@@ -66,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
         setContentView(R.layout.activity_main);
 
         ActionBar actionBar = getSupportActionBar();
@@ -79,7 +85,23 @@ public class MainActivity extends AppCompatActivity {
         //storage permission
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
+        Button button = (Button) findViewById(R.id.button_translate);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openTransalateActivity();
+            }
+        });
 
+
+    }
+
+    private void openTransalateActivity() {
+        Intent intent = new Intent(this, TranslateActivity.class);
+        String text = mResultEt.getText().toString();
+        Log.i("myApp", text);
+        intent.putExtra("EXTRA_TEXT", text);
+        startActivity(intent);
     }
 
     public void save(View v){

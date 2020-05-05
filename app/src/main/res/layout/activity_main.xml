@@ -64,6 +64,12 @@
                android:text="load"
                android:layout_gravity="center_horizontal"
                android:onClick="load"></Button>
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/button_translate"
+               android:text="Translate"
+               android:layout_gravity="center_horizontal"></Button>
 
            <androidx.cardview.widget.CardView
                android:layout_width="match_parent"

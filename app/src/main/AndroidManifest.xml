@@ -21,6 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".TranslateActivity"></activity>
         <!--add in application tag-->
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/AppTheme"/> <!-- optional (needed if default theme has no action bar) -->
