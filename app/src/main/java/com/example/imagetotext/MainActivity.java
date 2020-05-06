@@ -111,6 +111,12 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_TITLE, "filename.txt");
 
         startActivityForResult(intent, 1);
+
+        File file = new File(Environment.getExternalStorageDirectory()+"/Imagetotext");
+        boolean success = true;
+        if(!file.exists()){
+            file.mkdir();
+        }
     }
 
 
