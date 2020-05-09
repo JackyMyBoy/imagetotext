@@ -74,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         setContentView(R.layout.activity_main);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setSubtitle("Click + button to insert Image");
+        //ActionBar actionBar = getSupportActionBar();
+        //actionBar.setSubtitle("Click + button to insert Image");
 
         mResultEt = findViewById(R.id.resultEt);
         mPreviewIv = findViewById(R.id.imageIv);
@@ -93,7 +93,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button filebutton = (Button) findViewById(R.id.button_filemanager);
+        filebutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileManagerActivity();
+            }
+        });
 
+    }
+
+    private void openFileManagerActivity(){
+        Intent intent = new Intent(this, FileManagerActivity.class);
+        startActivity(intent);
     }
 
     private void openTransalateActivity() {
