@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,8 @@ import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateRemoteM
 import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslator;
 import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions;
 
+import java.util.ArrayList;
+
 public class TranslateActivity extends AppCompatActivity {
 
     private TextView mSourceLang;
@@ -29,6 +33,9 @@ public class TranslateActivity extends AppCompatActivity {
     private Button mTranslateBtn;
     private TextView mTranslatedText;
     private String sourceText;
+
+    private ArrayList<CountryItem> mCountryList;
+    private CountryAdapter mAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +45,25 @@ public class TranslateActivity extends AppCompatActivity {
         mSourceText = findViewById(R.id.sourceText);
         mTranslateBtn = findViewById(R.id.translate);
         mTranslatedText = findViewById(R.id.translatedText);
+
+        initList();
+        Spinner spinnerCountries = findViewById(R.id.spinnerTlInto);
+        mAdapter = new CountryAdapter(this,mCountryList);
+        spinnerCountries.setAdapter(mAdapter);
+
+        spinnerCountries.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                CountryItem clickedItem = (CountryItem) parent.getItemAtPosition(position);
+                String clickedCountryName = clickedItem.getCountryName();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         Intent intent = getIntent();
         final String text = intent.getStringExtra("EXTRA_TEXT");
@@ -52,6 +78,14 @@ public class TranslateActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void initList() {
+        mCountryList = new ArrayList<>();
+        mCountryList.add(new CountryItem("English", R.drawable.flag_united_kingdom));
+        mCountryList.add(new CountryItem("Russian", R.drawable.flag_russian));
+        mCountryList.add(new CountryItem("Japanese", R.drawable.flag_japan));
+        mCountryList.add(new CountryItem("Lithuanian", R.drawable.flag_lithuania));
     }
 
     private void identifyLanguage(String text) {
@@ -84,6 +118,14 @@ public class TranslateActivity extends AppCompatActivity {
             case "en":
                 langCode = FirebaseTranslateLanguage.EN;
                 mSourceLang.setText("English");
+                break;
+            case "ru":
+                langCode = FirebaseTranslateLanguage.RU;
+                mSourceLang.setText("Russian");
+                break;
+            case "ja":
+                langCode = FirebaseTranslateLanguage.JA;
+                mSourceLang.setText("Japanese");
                 break;
             default:
                 langCode = 0;
