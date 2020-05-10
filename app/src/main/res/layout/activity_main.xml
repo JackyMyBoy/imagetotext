@@ -1,21 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:id="@+id/drawerLayout"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
-   <ScrollView
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/navView"
+        app:headerLayout="@layout/header"
+        app:menu="@menu/hamburger_menu"
+        android:layout_gravity="start"/>
+
+    <ScrollView
        android:layout_width="match_parent"
        android:layout_height="wrap_content">
+
        <LinearLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:orientation="vertical">
-
+           <androidx.appcompat.widget.Toolbar
+               android:id="@+id/toolbar"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:background="?attr/colorPrimary"
+               android:minHeight="?attr/actionBarSize"
+               android:theme="?attr/actionBarTheme"
+               app:navigationIcon="@drawable/ic_menu_image" />
            <androidx.cardview.widget.CardView
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
@@ -113,4 +132,4 @@
        </LinearLayout>
    </ScrollView>
 
-</RelativeLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
