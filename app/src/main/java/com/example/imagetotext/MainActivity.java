@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     String cameraPermission[];
     String storagePermission[];
+    String readStoragePermission[];
 
     Uri image_uri;
 
@@ -83,6 +84,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
         setContentView(R.layout.activity_main);
+
+        //File file = new File(Environment.getExternalStorageDirectory()+File.separator +"Imagetotext");
+        //File file = getFilesDir();
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+ File.separator + "ImageToText";
+        //String documents = "documents/ImageToText";
+        //File documentsFolder = new File(file, documents);
+        //String ll = documentsFolder.toString();
+        File file = new File(path);
+        boolean success = true;
+        if(!file.exists()){
+            success = file.mkdirs();
+        }
+        if(success){
+            Toast.makeText(getApplicationContext(), "Folder created"+ path, Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(getApplicationContext(), "Failed to create folder" + path, Toast.LENGTH_LONG).show();
+
+        }
 
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navView);
@@ -109,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         //storage permission
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        readStoragePermission = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
 
         Button button = (Button) findViewById(R.id.button_translate);
         button.setOnClickListener(new View.OnClickListener() {
@@ -157,12 +177,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         intent.putExtra(Intent.EXTRA_TITLE, "filename.txt");
 
         startActivityForResult(intent, 1);
-
-        File file = new File(Environment.getExternalStorageDirectory()+"/Imagetotext");
-        boolean success = true;
-        if(!file.exists()){
-            file.mkdir();
-        }
     }
 
 
@@ -337,11 +351,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void requestStoragePermission() {
         ActivityCompat.requestPermissions(this,storagePermission, STORAGE_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this,readStoragePermission,STORAGE_REQUEST_CODE);
     }
 
     private boolean checkStoragePermission() {
         boolean result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-        return result;
+        boolean result1 = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+        return result && result1;
     }
 
     private void requestCameraPermission() {

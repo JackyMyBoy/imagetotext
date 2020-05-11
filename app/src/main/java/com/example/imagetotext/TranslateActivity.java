@@ -30,12 +30,15 @@ public class TranslateActivity extends AppCompatActivity {
 
     private TextView mSourceLang;
     private EditText mSourceText;
-    private Button mTranslateBtn;
+    private Button mDetectLanguageBtn;
     private TextView mTranslatedText;
     private String sourceText;
+    private Button mTranslateBtn;
 
     private ArrayList<CountryItem> mCountryList;
     private CountryAdapter mAdapter;
+    private String clickedTlLanguageNameInto;
+    private String clickedTlLanguageNameFrom;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,24 +46,40 @@ public class TranslateActivity extends AppCompatActivity {
         setContentView(R.layout.translate_main);
         mSourceLang = findViewById(R.id.sourceLang);
         mSourceText = findViewById(R.id.sourceText);
-        mTranslateBtn = findViewById(R.id.translate);
+        mDetectLanguageBtn = findViewById(R.id.detect_language);
         mTranslatedText = findViewById(R.id.translatedText);
+        mTranslateBtn = findViewById(R.id.translate);
 
         initList();
-        Spinner spinnerCountries = findViewById(R.id.spinnerTlInto);
-        mAdapter = new CountryAdapter(this,mCountryList);
-        spinnerCountries.setAdapter(mAdapter);
+        Spinner spinnerLanguageTlInto = findViewById(R.id.spinnerTlInto);
+        Spinner spinnerLanguageTlFrom = findViewById(R.id.spinnerTlFrom);
 
-        spinnerCountries.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+        mAdapter = new CountryAdapter(this,mCountryList);
+        spinnerLanguageTlInto.setAdapter(mAdapter);
+        spinnerLanguageTlFrom.setAdapter(mAdapter);
+        clickedTlLanguageNameInto = "en";
+
+        spinnerLanguageTlInto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 CountryItem clickedItem = (CountryItem) parent.getItemAtPosition(position);
-                String clickedCountryName = clickedItem.getCountryName();
+                clickedTlLanguageNameInto = clickedItem.getCountryName();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+        spinnerLanguageTlFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                CountryItem clickedItem = (CountryItem) parent.getItemAtPosition(position);
+                clickedTlLanguageNameFrom = clickedItem.getCountryName();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
@@ -69,11 +88,22 @@ public class TranslateActivity extends AppCompatActivity {
         final String text = intent.getStringExtra("EXTRA_TEXT");
         mSourceText.setText(text);
 
-        mTranslateBtn.setOnClickListener(new View.OnClickListener(){
+        mDetectLanguageBtn.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 identifyLanguage(text);
+            }
+        });
+        mTranslateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                identifyLanguage("");
+                int langCodeFrom;
+                int langCodeInto;
+                langCodeFrom = getLanguageCode(clickedTlLanguageNameFrom);
+                langCodeInto = getLanguageCode(clickedTlLanguageNameInto);
+                translateText(langCodeFrom, langCodeInto);
             }
         });
 
@@ -82,13 +112,13 @@ public class TranslateActivity extends AppCompatActivity {
 
     private void initList() {
         mCountryList = new ArrayList<>();
-        mCountryList.add(new CountryItem("English", R.drawable.flag_united_kingdom));
-        mCountryList.add(new CountryItem("Russian", R.drawable.flag_russian));
-        mCountryList.add(new CountryItem("Japanese", R.drawable.flag_japan));
-        mCountryList.add(new CountryItem("Lithuanian", R.drawable.flag_lithuania));
+        mCountryList.add(new CountryItem("en", R.drawable.flag_united_kingdom));
+        mCountryList.add(new CountryItem("ru", R.drawable.flag_russian));
+        mCountryList.add(new CountryItem("ja", R.drawable.flag_japan));
+        mCountryList.add(new CountryItem("lt", R.drawable.flag_lithuania));
     }
 
-    private void identifyLanguage(String text) {
+    private void identifyLanguage(final String text) {
 
         sourceText = mSourceText.getText().toString();
         FirebaseLanguageIdentification identifier = FirebaseNaturalLanguage.getInstance().getLanguageIdentification();
@@ -98,17 +128,22 @@ public class TranslateActivity extends AppCompatActivity {
         identifier.identifyLanguage(sourceText).addOnSuccessListener(new OnSuccessListener<String>() {
             @Override
             public void onSuccess(String s) {
-                if(s.equals("und")){
-                    Toast.makeText(getApplicationContext(), "Language not identified", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    getLanguageCode(s);
+                if(text!="") {
+                    if (s.equals("und")) {
+                        Toast.makeText(getApplicationContext(), "Language not identified", Toast.LENGTH_SHORT).show();
+                    } else {
+                        int langCodeFrom;
+                        int langCodeInto;
+                        langCodeInto = getLanguageCode(clickedTlLanguageNameInto);
+                        langCodeFrom = getLanguageCode(s);
+                        translateText(langCodeFrom, langCodeInto);
+                    }
                 }
             }
         });
     }
 
-    private void getLanguageCode(String language) {
+    private int getLanguageCode(String language) {
         int langCode;
         switch (language){
             case "lt":
@@ -130,13 +165,13 @@ public class TranslateActivity extends AppCompatActivity {
             default:
                 langCode = 0;
         }
-        translateText(langCode);
+        return langCode;
     }
 
-    private void translateText(int langCode) {
+    private void translateText(int langCodeFrom, int langCodeInto) {
         mTranslatedText.setText("Translating...");
-        FirebaseTranslatorOptions options = new FirebaseTranslatorOptions.Builder().setSourceLanguage(langCode)
-                .setTargetLanguage(FirebaseTranslateLanguage.EN).build();
+        FirebaseTranslatorOptions options = new FirebaseTranslatorOptions.Builder().setSourceLanguage(langCodeFrom)
+                .setTargetLanguage(langCodeInto).build();
         final FirebaseTranslator translator = FirebaseNaturalLanguage.getInstance().getTranslator(options);
 
         FirebaseModelDownloadConditions conditions = new FirebaseModelDownloadConditions.Builder().build();

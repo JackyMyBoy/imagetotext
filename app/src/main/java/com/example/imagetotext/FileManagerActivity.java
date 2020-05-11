@@ -18,6 +18,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -141,84 +142,88 @@ public class FileManagerActivity extends AppCompatActivity {
         }
         if(!isFileManagerInitialised){
             final String rootPath = String.valueOf(Environment.
-                    getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
+                    getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + File.separator + "ImageToText");
             final File dir = new File(rootPath);
+            Toast.makeText(this,rootPath, Toast.LENGTH_LONG).show();
             files = dir.listFiles();
             final TextView pathOutput = findViewById(R.id.pathOutput);
             pathOutput.setText(rootPath.substring(rootPath.lastIndexOf('/')+1));
-            filesFoundCount = files.length;
+            if(files != null) {
+                filesFoundCount = files.length;
 
-            final ListView listView = (ListView) findViewById(R.id.filesView);
-            final TextAdapter textAdapter = new TextAdapter();
-            listView.setAdapter(textAdapter);
 
-            filesList = new ArrayList<>();
+                final ListView listView = (ListView) findViewById(R.id.filesView);
+                final TextAdapter textAdapter = new TextAdapter();
+                listView.setAdapter(textAdapter);
 
-            for(int i =0;i<filesFoundCount;i++){
-                filesList.add(String.valueOf(files[i].getAbsolutePath()));
-            }
+                filesList = new ArrayList<>();
 
-            textAdapter.setData(filesList);
-
-            selection = new boolean[files.length];
-
-            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                    selection[position]=!selection[position];
-                    textAdapter.setSelection(selection);
-                    boolean isAtleastOneSelected = false;
-                    for(boolean aSelection : selection){
-                        if(aSelection){
-                            isAtleastOneSelected=true;
-                            break;
-                        }
-                    }
-                    if(isAtleastOneSelected){
-                        findViewById(R.id.bottomButtons).setVisibility(View.VISIBLE);
-                    }else {
-                        findViewById(R.id.bottomButtons).setVisibility(View.GONE);
-                    }
-                    return false;
+                for (int i = 0; i < filesFoundCount; i++) {
+                    filesList.add(String.valueOf(files[i].getAbsolutePath()));
                 }
-            });
 
-            final Button b1 = (Button) findViewById(R.id.b1);
+                textAdapter.setData(filesList);
 
-            b1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(FileManagerActivity.this);
-                    deleteDialog.setTitle("Delete");
-                    deleteDialog.setMessage("Do you really want to delete this file?");
-                    deleteDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            for(int i =0;i< files.length;i++){
-                                if(selection[i]){
-                                    deleteFileOrFolder(files[i]);
-                                    selection[i] = false;
+                selection = new boolean[files.length];
+
+                listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                        selection[position] = !selection[position];
+                        textAdapter.setSelection(selection);
+                        boolean isAtLeastOneSelected = false;
+                        for (boolean aSelection : selection) {
+                            if (aSelection) {
+                                isAtLeastOneSelected = true;
+                                break;
+                            }
+                        }
+                        if (isAtLeastOneSelected) {
+                            findViewById(R.id.bottomButtons).setVisibility(View.VISIBLE);
+                        } else {
+                            findViewById(R.id.bottomButtons).setVisibility(View.GONE);
+                        }
+                        return false;
+                    }
+                });
+
+                final Button b1 = (Button) findViewById(R.id.b1);
+
+                b1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(FileManagerActivity.this);
+                        deleteDialog.setTitle("Delete");
+                        deleteDialog.setMessage("Do you really want to delete this file?");
+                        deleteDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                for (int i = 0; i < files.length; i++) {
+                                    if (selection[i]) {
+                                        deleteFileOrFolder(files[i]);
+                                        selection[i] = false;
+                                    }
                                 }
-                            }
-                            files = dir.listFiles();
-                            filesFoundCount = files.length;
-                            filesList.clear();
-                            for(int i =0;i<filesFoundCount;i++){
-                                filesList.add(String.valueOf(files[i].getAbsolutePath()));
-                            }
+                                files = dir.listFiles();
+                                filesFoundCount = files.length;
+                                filesList.clear();
+                                for (int i = 0; i < filesFoundCount; i++) {
+                                    filesList.add(String.valueOf(files[i].getAbsolutePath()));
+                                }
 
-                            textAdapter.setData(filesList);
-                        }
-                    });
-                    deleteDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    deleteDialog.show();
-                }
-            });
+                                textAdapter.setData(filesList);
+                            }
+                        });
+                        deleteDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                        deleteDialog.show();
+                    }
+                });
+            }
 
             isFileManagerInitialised = true;
         }
@@ -243,7 +248,6 @@ public class FileManagerActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("NewApi")
     @Override
     public void onRequestPermissionsResult(final int requestCode, final String[] permissions,
                                            final int[] grantResults){

@@ -21,6 +21,13 @@
                 android:text="Detecting..."
                 android:textSize="20sp" />
 
+            <Spinner
+                android:id="@+id/spinnerTlFrom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="20sp" />
+
             <EditText
                 android:id="@+id/sourceText"
                 android:layout_width="match_parent"
@@ -30,6 +37,12 @@
                 android:hint="Source text"
                 android:minHeight="100dp" />
 
+            <Button
+                android:id="@+id/detect_language"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="Detect Language" />
             <Button
                 android:id="@+id/translate"
                 android:layout_width="match_parent"
