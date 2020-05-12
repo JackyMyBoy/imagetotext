@@ -10,6 +10,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //File file = new File(Environment.getExternalStorageDirectory()+File.separator +"Imagetotext");
         //File file = getFilesDir();
-        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+ File.separator + "ImageToText";
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+ File.separator + "ImageToText";
         //String documents = "documents/ImageToText";
         //File documentsFolder = new File(file, documents);
         //String ll = documentsFolder.toString();
@@ -138,15 +140,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        Button filebutton = (Button) findViewById(R.id.button_filemanager);
-        filebutton.setOnClickListener(new View.OnClickListener() {
+        Button clearButton = (Button) findViewById(R.id.button_clear);
+        Button copyButton = (Button) findViewById(R.id.button_copy);
+
+        copyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFileManagerActivity();
+                String Value = mResultEt.getText().toString();
+                if(Value.isEmpty()){
+                    Toast.makeText(getApplicationContext(), "No text", Toast.LENGTH_SHORT).show();
+                }else {
+                    ClipboardManager clipboardManager = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clipData = ClipData.newPlainText("Data", Value);
+                    clipboardManager.setPrimaryClip(clipData);
+                    Toast.makeText(getApplicationContext(),"Copied to Clipboard", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Text = mResultEt.getText().toString();
+                if(Text.isEmpty()){
+                    Toast.makeText(getApplicationContext(), "Text are empty", Toast.LENGTH_SHORT).show();
+                }else {
+                    mResultEt.setText("");
+                    mPreviewIv.setImageResource(0);
+                }
+            }
+        });
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -165,18 +191,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void openTransalateActivity() {
         Intent intent = new Intent(this, TranslateActivity.class);
         String text = mResultEt.getText().toString();
-        Log.i("myApp", text);
+        //Log.i("myApp", text);
         intent.putExtra("EXTRA_TEXT", text);
         startActivity(intent);
     }
 
     public void save(View v){
-        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TITLE, "filename.txt");
+        Intent intent = new Intent(this, SaveFileActivity.class);
+        String text = mResultEt.getText().toString();
+        intent.putExtra("EXTRA_TEXT", text);
+        startActivity(intent);
+        //Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        //intent.addCategory(Intent.CATEGORY_OPENABLE);
+        //intent.setType("text/plain");
+        //intent.putExtra(Intent.EXTRA_TITLE, "filename.txt");
 
-        startActivityForResult(intent, 1);
+        //startActivityForResult(intent, 1);
     }
 
 
