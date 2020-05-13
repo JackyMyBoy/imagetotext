@@ -37,13 +37,24 @@ public class SaveFileActivity extends Activity {
 
         Intent intent = getIntent();
         final String text = intent.getStringExtra("EXTRA_TEXT");
+        final String restart = intent.getStringExtra("RESTART");
+        final String oldFileName = intent.getStringExtra("FILE_NAME");
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String filename = srcText.getText().toString();
-                saveTextAsFile(filename, text);
-                finish();
+                if(restart.equals("true")){
+                    String filename = srcText.getText().toString();
+                    File delFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+ File.separator + "ImageToText" + File.separator + oldFileName);
+                    delFile.delete();
+                    saveTextAsFile(filename, text);
+                    Intent intent = new Intent(getApplicationContext(), FileManagerActivity.class);
+                    startActivity(intent);
+                }else {
+                    String filename = srcText.getText().toString();
+                    saveTextAsFile(filename, text);
+                    finish();
+                }
             }
         });
         cancelBtn.setOnClickListener(new View.OnClickListener() {

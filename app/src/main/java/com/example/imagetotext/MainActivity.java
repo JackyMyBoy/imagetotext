@@ -201,103 +201,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String text = mResultEt.getText().toString();
         intent.putExtra("EXTRA_TEXT", text);
         startActivity(intent);
-        //Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        //intent.addCategory(Intent.CATEGORY_OPENABLE);
-        //intent.setType("text/plain");
-        //intent.putExtra(Intent.EXTRA_TITLE, "filename.txt");
-
-        //startActivityForResult(intent, 1);
-    }
-
-
-    /*
-    public void save(View v){
-        String text = mResultEt.getText().toString();
-        FileOutputStream fos = null;
-        /*String path = Environment.getDataDirectory().toString();
-        File directory = new File(Environment.getDataDirectory()+"/imagetotext/");
-        if(!directory.exists())
-        {
-            directory.mkdirs();
-        }
-        File outputFile = new File(directory, FILE_NAME);
-        FileOutputStream fos = new FileOutputStream()
-
-        String folder_main = "imagetotext";
-        File directory = new File(Environment.getExternalStorageDirectory(),folder_main);
-        System.out.println(directory);
-        if(!directory.exists())
-        {
-            directory.mkdirs();
-        }
-        System.out.println(directory);
-        try{
-            File writefile = new File(directory,FILE_NAME);
-            FileWriter writer = new FileWriter(writefile);
-            writer.append(text);
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File(sdCard.getAbsolutePath() + "/dir1/dir2");
-        dir.mkdirs();
-        File file = new File(dir,FILE_NAME);
-
-        fos = new FileOutputStream(file);
-
-        try {
-            fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
-            fos.write(text.getBytes());
-
-            //System.out.println(path);
-
-            Toast.makeText(this, "Saved to "+ getFilesDir() + "/" + FILE_NAME, Toast.LENGTH_LONG).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if(fos != null){
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }*/ //senas saugojimo bandymas
-
-    public void load(View v){
-        FileInputStream fis = null;
-        try {
-            fis = openFileInput(FILE_NAME);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader br = new BufferedReader(isr);
-            StringBuilder sb = new StringBuilder();
-            String text;
-            System.out.println(getFilesDir().getAbsolutePath());
-            while((text = br.readLine()) !=null){
-                sb.append(text).append("\n");
-            }
-
-            mResultEt.setText(sb.toString());
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if(fis != null){
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     //actionbar menu
@@ -483,27 +386,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Exception error = result.getError();
                 Toast.makeText(this, ""+error, Toast.LENGTH_SHORT).show();
 
-            }
-        }
-
-        if (requestCode == 1){
-            if(resultCode == RESULT_OK){
-                try {
-                    Uri uri = data.getData();
-
-                    OutputStream outputStream = getContentResolver().openOutputStream(uri);
-
-                    outputStream.write(mResultEt.getText().toString().getBytes());
-
-                    outputStream.close();
-
-                    Toast.makeText(this,"File saved successfully", Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(this, "Failed to save file", Toast.LENGTH_SHORT).show();
-                }
-            }else{
-                Toast.makeText(this,"File not saved", Toast.LENGTH_SHORT).show();
             }
         }
     }

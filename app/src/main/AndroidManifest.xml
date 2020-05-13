@@ -24,12 +24,24 @@
         </activity>
         <activity android:name=".TranslateActivity"></activity>
         <activity android:name=".FileManagerActivity"></activity>
+        <activity android:name=".EditFileActivity"></activity>
         <activity android:name=".SaveFileActivity"
             android:theme="@style/AppTheme.CustomTheme">
         </activity>
         <!--add in application tag-->
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/> <!-- optional (needed if default theme has no action bar) -->
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.imagetotext.FileManagerActivity"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths">
+            </meta-data>
+        </provider>
     </application>
 
 </manifest>

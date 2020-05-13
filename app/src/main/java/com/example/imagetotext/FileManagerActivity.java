@@ -2,15 +2,19 @@ package com.example.imagetotext;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,19 +24,50 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.navigation.NavigationView;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class FileManagerActivity extends AppCompatActivity {
+public class FileManagerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    Toolbar toolbar;
+    String moveFileText;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.file_manager_main);
+
+        drawerLayout = findViewById(R.id.fileManagerDrawerLayout);
+        navigationView = findViewById(R.id.fileManagerNavView);
+
+        toolbar = (Toolbar) findViewById(R.id.fileManagerToolbar);
+        setSupportActionBar(toolbar);
+
+        navigationView.bringToFront();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     class TextAdapter extends BaseAdapter{
@@ -187,9 +222,9 @@ public class FileManagerActivity extends AppCompatActivity {
                     }
                 });
 
-                final Button b1 = (Button) findViewById(R.id.b1);
+                final Button deleteBtn = (Button) findViewById(R.id.delBtn);
 
-                b1.setOnClickListener(new View.OnClickListener() {
+                deleteBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(FileManagerActivity.this);
@@ -223,13 +258,159 @@ public class FileManagerActivity extends AppCompatActivity {
                         deleteDialog.show();
                     }
                 });
+
+                final Button shareBtn = (Button) findViewById(R.id.shareBtn);
+
+                shareBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        for(int i =0;i<files.length;i++){
+                            if(selection[i]){
+                                String apkPath = files[i].toString();
+                                Uri path = FileProvider.getUriForFile(getApplicationContext(), "com.example.imagetotext.FileManagerActivity", new File(apkPath));
+                                //Toast.makeText(getApplicationContext(),files[i].toString(),Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(Intent.ACTION_SEND);
+                                intent.setType("application/vnd.android.package-archive");
+                                intent.putExtra(Intent.EXTRA_STREAM, path);
+                                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                startActivity(Intent.createChooser(intent, "ShareVia"));
+                            }
+                        }
+                    }
+                });
+
+                final Button editBtn = (Button) findViewById(R.id.editBtn);
+
+                editBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        for(int i =0;i<files.length;i++) {
+                            if (selection[i]) {
+                                File file = new File(files[i].toString());
+                                StringBuilder text = new StringBuilder();
+                                try {
+                                    BufferedReader br = new BufferedReader(new FileReader(file));
+                                    String line;
+                                    while ((line = br.readLine())!=null){
+                                        text.append(line);
+                                        text.append("\n");
+                                    }
+                                    br.close();
+                                }catch (IOException e){
+                                    e.printStackTrace();
+                                }
+                                Intent intent = new Intent(getApplicationContext(), EditFileActivity.class);
+                                String intentText = text.toString();
+                                intent.putExtra("EXTRA_TEXT", intentText);
+                                intent.putExtra("EXTRA_URI", files[i].toString());
+                                startActivity(intent);
+                            }
+                        }
+                    }
+                });
+
+                final Button moveBtn = (Button) findViewById(R.id.moveBtn);
+
+                moveBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        for(int i =0;i<files.length;i++) {
+                            if (selection[i]) {
+                                String filename = files[i].toString().substring(files[i].toString().lastIndexOf('/')+1);
+                                File file = new File(files[i].toString());
+                                StringBuilder text = new StringBuilder();
+                                try {
+                                    BufferedReader br = new BufferedReader(new FileReader(file));
+                                    String line;
+                                    while ((line = br.readLine())!=null){
+                                        text.append(line);
+                                        text.append("\n");
+                                    }
+                                    br.close();
+                                }catch (IOException e){
+                                    e.printStackTrace();
+                                }
+                                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                                intent.setType("text/plain");
+                                intent.putExtra(Intent.EXTRA_TITLE,filename);
+                                moveFileText = text.toString();
+                                startActivityForResult(intent,1);
+                                file.delete();
+                                selection[i] = false;
+                                files = dir.listFiles();
+                                filesFoundCount = files.length;
+                                filesList.clear();
+                                for (int l = 0; l < filesFoundCount; l++) {
+                                    filesList.add(String.valueOf(files[l].getAbsolutePath()));
+                                }
+
+                                textAdapter.setData(filesList);
+                            }
+                        }
+                    }
+                });
+
+                final Button renameBtn = (Button) findViewById(R.id.renameBtn);
+
+                renameBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        for(int i =0;i<files.length;i++) {
+                            if (selection[i]) {
+                                String filename = files[i].toString().substring(files[i].toString().lastIndexOf('/')+1);
+                                File file = new File(files[i].toString());
+                                StringBuilder text = new StringBuilder();
+                                try {
+                                    BufferedReader br = new BufferedReader(new FileReader(file));
+                                    String line;
+                                    while ((line = br.readLine())!=null){
+                                        text.append(line);
+                                        text.append("\n");
+                                    }
+                                    br.close();
+                                }catch (IOException e){
+                                    e.printStackTrace();
+                                }
+                                Intent intent = new Intent(getApplicationContext(), SaveFileActivity.class);
+                                intent.putExtra("EXTRA_TEXT", text.toString());
+                                intent.putExtra("RESTART", "true");
+                                intent.putExtra("FILE_NAME",filename);
+                                startActivity(intent);
+                            }
+                        }
+                    }
+                });
             }
 
             isFileManagerInitialised = true;
         }
     }
 
-    private void deleteFileOrFolder( File fileOrFolder){
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1){
+            if(resultCode== RESULT_OK){
+                try {
+                    Uri uri = data.getData();
+                    OutputStream outputStream = getContentResolver().openOutputStream(uri);
+                    outputStream.write(moveFileText.getBytes());
+                    outputStream.close();
+                    Toast.makeText(getApplicationContext(),"File moved successfully",Toast.LENGTH_SHORT).show();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),"Failed to move file",Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                Toast.makeText(getApplicationContext(),"Error moving file",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void deleteFileOrFolder(File fileOrFolder){
         if(fileOrFolder.isDirectory()){
             if(fileOrFolder.list().length==0){
                 fileOrFolder.delete();
@@ -262,5 +443,27 @@ public class FileManagerActivity extends AppCompatActivity {
                 onResume();
             }
         }
+    }
+
+    //actionbar menu
+
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.homeNav:
+                Intent intent1 = new Intent(FileManagerActivity.this, MainActivity.class);
+                startActivity(intent1);
+                break;
+            case R.id.translateNav:
+                Intent intent2 = new Intent(FileManagerActivity.this, TranslateActivity.class);
+                startActivity(intent2);
+                break;
+            case R.id.filesNav:
+                break;
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
