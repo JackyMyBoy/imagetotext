@@ -42,6 +42,9 @@
                 android:resource="@xml/provider_paths">
             </meta-data>
         </provider>
+        <meta-data
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+            android:value="ocr" />
     </application>
 
 </manifest>

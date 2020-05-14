@@ -18,6 +18,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class SaveFileActivity extends Activity {
+    private String restart;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,13 +39,13 @@ public class SaveFileActivity extends Activity {
 
         Intent intent = getIntent();
         final String text = intent.getStringExtra("EXTRA_TEXT");
-        final String restart = intent.getStringExtra("RESTART");
+        restart = intent.getStringExtra("RESTART");
         final String oldFileName = intent.getStringExtra("FILE_NAME");
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(restart.equals("true")){
+                if(restart!=null){
                     String filename = srcText.getText().toString();
                     File delFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+ File.separator + "ImageToText" + File.separator + oldFileName);
                     delFile.delete();
