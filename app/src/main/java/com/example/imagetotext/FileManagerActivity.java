@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -181,10 +182,10 @@ public class FileManagerActivity extends AppCompatActivity implements Navigation
             final String rootPath = String.valueOf(Environment.
                     getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + File.separator + "ImageToText");
             final File dir = new File(rootPath);
-            Toast.makeText(this,rootPath, Toast.LENGTH_LONG).show();
+            //Toast.makeText(this,rootPath, Toast.LENGTH_LONG).show();
             files = dir.listFiles();
-            final TextView pathOutput = findViewById(R.id.pathOutput);
-            pathOutput.setText(rootPath.substring(rootPath.lastIndexOf('/')+1));
+            //final TextView pathOutput = findViewById(R.id.pathOutput);
+            //pathOutput.setText(rootPath.substring(rootPath.lastIndexOf('/')+1));
             if(files != null) {
                 filesFoundCount = files.length;
 
@@ -224,7 +225,7 @@ public class FileManagerActivity extends AppCompatActivity implements Navigation
                     }
                 });
 
-                final Button deleteBtn = (Button) findViewById(R.id.delBtn);
+                final ImageButton deleteBtn = findViewById(R.id.delBtn);
 
                 deleteBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -261,7 +262,7 @@ public class FileManagerActivity extends AppCompatActivity implements Navigation
                     }
                 });
 
-                final Button shareBtn = (Button) findViewById(R.id.shareBtn);
+                final ImageButton shareBtn = findViewById(R.id.shareBtn);
 
                 shareBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -281,7 +282,7 @@ public class FileManagerActivity extends AppCompatActivity implements Navigation
                     }
                 });
 
-                final Button editBtn = (Button) findViewById(R.id.editBtn);
+                final ImageButton editBtn = findViewById(R.id.editBtn);
 
                 editBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -311,7 +312,7 @@ public class FileManagerActivity extends AppCompatActivity implements Navigation
                     }
                 });
 
-                final Button moveBtn = (Button) findViewById(R.id.moveBtn);
+                final ImageButton moveBtn = findViewById(R.id.moveBtn);
 
                 moveBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -355,7 +356,7 @@ public class FileManagerActivity extends AppCompatActivity implements Navigation
                     }
                 });
 
-                final Button renameBtn = (Button) findViewById(R.id.renameBtn);
+                final ImageButton renameBtn = findViewById(R.id.renameBtn);
 
                 renameBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -391,6 +392,10 @@ public class FileManagerActivity extends AppCompatActivity implements Navigation
         }
     }
 
+    protected void restartActivity(){
+        startActivity(getIntent());
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -410,7 +415,9 @@ public class FileManagerActivity extends AppCompatActivity implements Navigation
                     Toast.makeText(getApplicationContext(),"Failed to move file",Toast.LENGTH_SHORT).show();
                 }
             }else {
-                Toast.makeText(getApplicationContext(),"Error moving file",Toast.LENGTH_SHORT).show();
+                restartActivity();
+                //Toast.makeText(getApplicationContext(),"Error moving file",Toast.LENGTH_SHORT).show();
+
             }
         }
     }

@@ -3,23 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="200dp"
     android:orientation="vertical"
-    android:background="@drawable/ic_launcher_background"
+    android:background="@drawable/b2b3862ac1017aa770a23ebe21b47507"
     android:gravity="bottom"
     android:padding="20dp">
 
     <ImageView
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:src="@drawable/ic_menu_image"/>
+        android:src="@drawable/ic_eye"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Image"
-        android:textSize="24sp"/>
+        android:text="TextVision"
+        android:textSize="24sp"
+        android:textColor="@color/light_grey"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ssss"
-        android:textSize="14sp"/>
+        android:text="Text reading application"
+        android:textSize="14sp"
+        android:textColor="@color/light_grey"/>
 </LinearLayout>

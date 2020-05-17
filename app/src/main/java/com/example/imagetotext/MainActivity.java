@@ -38,6 +38,7 @@ import android.view.Surface;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
@@ -114,12 +115,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(!file.exists()){
             success = file.mkdirs();
         }
-        if(success){
+        /*if(success){
             Toast.makeText(getApplicationContext(), "Folder created"+ path, Toast.LENGTH_LONG).show();
         }else {
             Toast.makeText(getApplicationContext(), "Failed to create folder" + path, Toast.LENGTH_LONG).show();
 
-        }
+        }*/
 
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navView);
@@ -148,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
         readStoragePermission = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
 
-        Button button = (Button) findViewById(R.id.button_translate);
+        ImageButton button = findViewById(R.id.button_translate);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,8 +157,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        Button clearButton = (Button) findViewById(R.id.button_clear);
-        Button copyButton = (Button) findViewById(R.id.button_copy);
+        ImageButton clearButton = findViewById(R.id.button_clear);
+        ImageButton copyButton = findViewById(R.id.button_copy);
 
         copyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                 String Text = mResultEt.getText().toString();
                 if(Text.isEmpty()){
-                    Toast.makeText(getApplicationContext(), "Text are empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Text is cleared", Toast.LENGTH_SHORT).show();
                 }else {
                     mResultEt.setText("");
                     mPreviewIv.setImageResource(0);
@@ -230,9 +231,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         if (id == R.id.addImage){
             showImageImportDialog();
-        }
-        if (id == R.id.settings){
-            Toast.makeText(this,"Settings",Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }

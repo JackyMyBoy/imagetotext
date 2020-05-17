@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/light_grey">
 
     <EditText
         android:id="@+id/editFileText"
@@ -10,24 +11,27 @@
         android:layout_margin="20dp"
         android:gravity="top"
         android:hint="File name"
-        android:minHeight="100dp" />
+        android:minHeight="100dp"
+        android:textColor="@color/black"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal">
-        <Button
+        <ImageButton
             android:id="@+id/edit_save"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Save"/>
+            android:text="Save"
+            android:src="@drawable/ic_save" />
 
-        <Button
+        <ImageButton
             android:id="@+id/edit_cancel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Cancel"/>
+            android:text="Cancel"
+            android:src="@drawable/ic_cancel"/>
 
     </LinearLayout>
 

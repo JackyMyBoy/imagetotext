@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -22,8 +23,8 @@ public class EditFileActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_file_main);
 
-        Button saveBtn = (Button) findViewById(R.id.edit_save);
-        Button cancelBtn = (Button) findViewById(R.id.edit_cancel);
+        ImageButton saveBtn = findViewById(R.id.edit_save);
+        ImageButton cancelBtn = findViewById(R.id.edit_cancel);
         final EditText editText = (EditText) findViewById(R.id.editFileText);
 
         Intent intent = getIntent();

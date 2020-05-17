@@ -8,6 +8,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -33,8 +34,8 @@ public class SaveFileActivity extends Activity {
 
         getWindow().setLayout((int)(width*.8),(int)(height*.4));
 
-        Button saveBtn = (Button) findViewById(R.id.button_save);
-        Button cancelBtn = (Button) findViewById(R.id.button_cancel);
+        ImageButton saveBtn = findViewById(R.id.button_save);
+        ImageButton cancelBtn = findViewById(R.id.button_cancel);
         final EditText srcText = (EditText) findViewById(R.id.fileName);
 
         Intent intent = getIntent();

@@ -47,7 +47,7 @@ public class TranslateActivity extends AppCompatActivity implements NavigationVi
     private TextView mSourceLang;
     private EditText mSourceText;
     private Button mDetectLanguageBtn;
-    private TextView mTranslatedText;
+    private EditText mTranslatedText;
     private String sourceText;
     private Button mTranslateBtn;
 

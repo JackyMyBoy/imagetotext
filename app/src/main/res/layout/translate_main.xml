@@ -46,56 +46,52 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_margin="20dp"
                 android:text="Detecting..."
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:visibility="gone"/>
 
             <Spinner
                 android:id="@+id/spinnerTlFrom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_margin="20sp" />
+                android:layout_marginTop="5dp"/>
 
             <EditText
                 android:id="@+id/sourceText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_margin="10dp"
                 android:gravity="top"
                 android:hint="Source text"
                 android:minHeight="100dp" />
-
-            <Button
-                android:id="@+id/detect_language"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="Detect Language" />
-            <Button
-                android:id="@+id/translate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="Translate" />
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/detect_language"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:text="Detect Language" />
+                <Button
+                    android:id="@+id/translate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:text="Translate" />
 
+            </LinearLayout>
             <Spinner
                 android:id="@+id/spinnerTlInto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="20sp" />
+                android:layout_gravity="center_horizontal"/>
 
-            <TextView
-                android:id="@+id/TranslateLang"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="20sp"
-                android:text="English"
-                android:textSize="20sp" />
-
-            <TextView
+            <EditText
                 android:id="@+id/translatedText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

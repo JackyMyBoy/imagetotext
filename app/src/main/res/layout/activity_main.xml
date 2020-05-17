@@ -49,7 +49,7 @@
                    android:padding="5dp">
                    <TextView
                        android:text="Result"
-                       android:textColor="@color/colorPrimary"
+                       android:textColor="@color/black"
                        android:textSize="20sp"
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content">
@@ -72,31 +72,36 @@
                android:layout_height="match_parent"
                android:orientation="horizontal">
 
-           <Button
+           <ImageButton
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_weight="1"
                android:id="@+id/button_save"
                android:text="save"
-               android:onClick="save"></Button>
-           <Button
+               android:onClick="save"
+               android:src="@drawable/ic_save">
+           </ImageButton>
+           <ImageButton
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:id="@+id/button_clear"
                android:text="Clear"
-               android:layout_weight="1"></Button>
-           <Button
+               android:layout_weight="1"
+               android:src="@drawable/ic_clear"></ImageButton>
+           <ImageButton
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:id="@+id/button_copy"
                android:text="Copy"
-               android:layout_weight="1"></Button>
-           <Button
+               android:layout_weight="1"
+               android:src="@drawable/ic_copy"></ImageButton>
+           <ImageButton
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:id="@+id/button_translate"
                android:text="Translate"
-               android:layout_weight="1"></Button>
+               android:layout_weight="1"
+               android:src="@drawable/ic_translate"></ImageButton>
            </LinearLayout>
            <androidx.cardview.widget.CardView
                android:layout_width="match_parent"
@@ -113,7 +118,7 @@
 
                    <TextView
                        android:text="Image Preview"
-                       android:textColor="@color/colorPrimary"
+                       android:textColor="@color/black"
                        android:textSize="20sp"
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content">

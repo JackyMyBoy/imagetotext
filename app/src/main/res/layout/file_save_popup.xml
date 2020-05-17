@@ -14,24 +14,27 @@
         android:layout_margin="20dp"
         android:gravity="top"
         android:hint="File name"
-        android:minHeight="100dp" />
+        android:minHeight="100dp"
+        android:textColor="@color/black"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal">
-        <Button
+        <ImageButton
             android:id="@+id/button_save"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Save"/>
+            android:text="Save"
+            android:src="@drawable/ic_save"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/button_cancel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Cancel"/>
+            android:text="Cancel"
+            android:src="@drawable/ic_cancel"/>
 
     </LinearLayout>
 </LinearLayout>

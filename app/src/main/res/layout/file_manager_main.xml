@@ -33,14 +33,6 @@
         android:theme="?attr/actionBarTheme"
         app:navigationIcon="@drawable/ic_menu_image" />
 
-    <TextView
-        android:id="@+id/pathOutput"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:background="@color/colorPrimary"/>
     <ListView
         android:id="@+id/filesView"
         android:layout_width="match_parent"
@@ -53,36 +45,41 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal">
-        <Button
+        <ImageButton
             android:text="Del"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/delBtn" />
-        <Button
+            android:id="@+id/delBtn"
+            android:src="@drawable/ic_delete"/>
+        <ImageButton
             android:text="Share"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/shareBtn" />
-        <Button
+            android:id="@+id/shareBtn"
+            android:src="@drawable/ic_share"/>
+        <ImageButton
             android:text="Edit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/editBtn" />
-        <Button
+            android:id="@+id/editBtn"
+            android:src="@drawable/ic_edit"/>
+        <ImageButton
             android:text="Move"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/moveBtn" />
-        <Button
+            android:id="@+id/moveBtn"
+            android:src="@drawable/ic_move" />
+        <ImageButton
             android:text="Rename"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/renameBtn" />
+            android:id="@+id/renameBtn"
+            android:src="@drawable/ic_rename"/>
 
     </LinearLayout>
 
