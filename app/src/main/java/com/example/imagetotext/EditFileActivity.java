@@ -48,7 +48,8 @@ public class EditFileActivity extends Activity {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent intent = new Intent(getApplicationContext(), FileManagerActivity.class);
+                startActivity(intent);
             }
         });
     }

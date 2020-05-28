@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -50,6 +51,7 @@ public class TranslateActivity extends AppCompatActivity implements NavigationVi
     private EditText mTranslatedText;
     private String sourceText;
     private Button mTranslateBtn;
+    private ImageButton mSaveTranslation;
 
     private ArrayList<CountryItem> mCountryList;
     private CountryAdapter mAdapter;
@@ -72,6 +74,7 @@ public class TranslateActivity extends AppCompatActivity implements NavigationVi
         mDetectLanguageBtn = findViewById(R.id.detect_language);
         mTranslatedText = findViewById(R.id.translatedText);
         mTranslateBtn = findViewById(R.id.translate);
+        mSaveTranslation = findViewById(R.id.button_translate_save);
 
         initList();
         spinnerLanguageTlInto = findViewById(R.id.spinnerTlInto);
@@ -142,6 +145,13 @@ public class TranslateActivity extends AppCompatActivity implements NavigationVi
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void save(View v){
+        Intent intent = new Intent(this, SaveFileActivity.class);
+        String text = mTranslatedText.getText().toString();
+        intent.putExtra("EXTRA_TEXT", text);
+        startActivity(intent);
     }
 
     @Override
@@ -420,6 +430,7 @@ public class TranslateActivity extends AppCompatActivity implements NavigationVi
                     @Override
                     public void onSuccess(String s) {
                         mTranslatedText.setText(s);
+                        mSaveTranslation.setVisibility(View.VISIBLE);
                     }
                 });
             }

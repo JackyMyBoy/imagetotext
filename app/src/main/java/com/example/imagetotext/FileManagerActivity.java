@@ -171,6 +171,8 @@ public class FileManagerActivity extends AppCompatActivity implements Navigation
 
     private boolean fileMoved = false;
 
+    private File filetodelete;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -333,15 +335,13 @@ public class FileManagerActivity extends AppCompatActivity implements Navigation
                                 }catch (IOException e){
                                     e.printStackTrace();
                                 }
+                                filetodelete = file;
                                 Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
                                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                                 intent.setType("text/plain");
                                 intent.putExtra(Intent.EXTRA_TITLE,filename);
                                 moveFileText = text.toString();
                                 startActivityForResult(intent,1);
-                                if(fileMoved){
-                                    file.delete();
-                                }
                                 selection[i] = false;
                                 files = dir.listFiles();
                                 filesFoundCount = files.length;
@@ -407,7 +407,8 @@ public class FileManagerActivity extends AppCompatActivity implements Navigation
                     outputStream.write(moveFileText.getBytes());
                     outputStream.close();
                     Toast.makeText(getApplicationContext(),"File moved successfully",Toast.LENGTH_SHORT).show();
-                    fileMoved = true;
+                    filetodelete.delete();
+                    restartActivity();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
